@@ -1,0 +1,29 @@
+country,country_name,exchange,exchange_name,segments,currency,collector,status,participant_data,notes
+TW,Taiwan,TWSE,Taiwan Stock Exchange,stocks,TWD,tw,auto,monthly,Retail is residual of total minus 3 major institutional investors (so includes domestic corporates). Source: TWSE RWD JSON (FMTQIK + BFI82U).
+TW,Taiwan,TPEX,Taipei Exchange,stocks,TWD,tw,auto,monthly,Source: TPEx JSON (afterTrading/marketStats + insti/summary).
+TW,Taiwan,TAIFEX,Taiwan Futures Exchange,futures;options,TWD,tw,auto,monthly,Contracts and notional by product; participant split by contracts (individuals reported directly). Source: TAIFEX eng7 monthly tables + eng3 daily downloads.
+JP,Japan,TSE,Tokyo Stock Exchange (JPX),stocks,JPY,jp,auto,monthly,Turnover from JPX Monthly Statistics Report PDF (domestic common stocks all markets). Investor types from JPX Trading by Type of Investors (participants with capital >= JPY 3bn ~90% coverage).
+JP,Japan,OSE,Osaka Exchange (JPX),futures;options,JPY,jp,auto,monthly,Includes TOCOM commodity products listed on OSE statistics. Options value is premium. Investor-type monthly = sum of reporting weeks.
+KR,Korea,KRX,Korea Exchange,stocks;futures;options,KRW,kr,auto,monthly,Stocks via KRX data portal outer-loader (no login). Derivatives via KOSIS monthly filing (statId 1976006). KRX counts spread trades as 2 contracts. Weekly options folded into options ALL; no all-options participant split.
+HK,Hong Kong,HKEX,Hong Kong Exchanges and Clearing,stocks;futures;options,HKD,,manual,annual-survey,Monthly Market Highlights (ADT) and derivatives monthly statistics are downloadable; participant mix only from annual Derivatives Market Transaction Survey. Cash survey discontinued.
+CN,China,SSE,Shanghai Stock Exchange,stocks;options,CNY,,manual,none,Monthly turnover from SSE statistics; 50ETF/300ETF options volumes from SSE options statistics. No monthly investor-type split (annual yearbook only).
+CN,China,SZSE,Shenzhen Stock Exchange,stocks;options,CNY,,manual,none,Monthly turnover from SZSE market data; ETF options from SZSE. No monthly investor-type split.
+CN,China,BSE,Beijing Stock Exchange,stocks,CNY,,manual,none,Small. Monthly turnover from BSE statistics.
+CN,China,CFFEX,China Financial Futures Exchange,futures;options,CNY,,manual,none,Index futures (IF/IH/IC/IM) and index options (IO/MO/HO) plus bond futures; monthly volume and turnover from CFFEX / China Futures Association monthly report.
+CN,China,SHFE,Shanghai Futures Exchange (incl. INE),futures;options,CNY,,manual,none,Commodity futures and options. CFA monthly report gives volume (lots) and turnover.
+CN,China,DCE,Dalian Commodity Exchange,futures;options,CNY,,manual,none,CFA monthly report.
+CN,China,CZCE,Zhengzhou Commodity Exchange,futures;options,CNY,,manual,none,CFA monthly report.
+CN,China,GFEX,Guangzhou Futures Exchange,futures;options,CNY,,manual,none,CFA monthly report.
+AU,Australia,ASX,ASX (cash + ASX options),stocks;options,AUD,,manual,none,ASX Monthly Activity Report: cash value traded; ETO contracts. No participant split published.
+AU,Australia,ASX24,ASX 24 (futures),futures,AUD,,manual,none,SPI 200 / 3y-10y bond / 90-day bill futures contracts from ASX Monthly Activity Report.
+AU,Australia,CXA,Cboe Australia,stocks,AUD,,manual,none,Cash market share published monthly by Cboe Australia.
+TH,Thailand,SET,Stock Exchange of Thailand (incl. mai),stocks,THB,,manual,monthly,SET market statistics give turnover and trading by investor type (local institutions / proprietary / foreign / local individuals).
+TH,Thailand,TFEX,Thailand Futures Exchange,futures;options,THB,,manual,monthly,TFEX monthly statistics: contracts by product and investor-type split (institution / foreign / local individual).
+VN,Vietnam,HOSE,Ho Chi Minh Stock Exchange,stocks,VND,,manual,foreign-only,Monthly trading value; foreign vs domestic published. Retail/institution split not published.
+VN,Vietnam,HNX,Hanoi Stock Exchange (incl. UPCoM; VN30 futures),stocks;futures,VND,,manual,partial,HNX monthly derivatives report gives individual vs institutional vs foreign share for VN30 futures.
+IN,India,NSE,National Stock Exchange of India,stocks;futures;options,INR,,manual,monthly,Monthly Business Growth report (turnover and premium turnover) and category-wise participation (individuals / prop / FII / DII / corporates). Store options notional AND premium.
+IN,India,BSE,BSE Ltd,stocks;futures;options,INR,,manual,none,Sensex options grew sharply since 2023; BSE monthly statistics.
+IN,India,MCX,Multi Commodity Exchange,futures;options,INR,,manual,none,Monthly volume and turnover from MCX / SEBI bulletin.
+IN,India,NCDEX,National Commodity & Derivatives Exchange,futures;options,INR,,manual,none,Small agri commodities.
+SG,Singapore,SGX,Singapore Exchange,stocks;futures;options,SGD,,manual,none,SGX monthly market statistics: securities turnover (SGD) and derivatives contracts by product (A50 / Nifty / Nikkei / iron ore / FX). Notional for derivatives not published uniformly.
+MY,Malaysia,BURSA,Bursa Malaysia (incl. Bursa Derivatives),stocks;futures;options,MYR,,manual,monthly-stocks,Bursa monthly trading participation (retail / local institutions / foreign) for equities; FCPO and FKLI contracts from Bursa Derivatives statistics.

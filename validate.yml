@@ -1,0 +1,23 @@
+name: Validate data
+
+# Runs on every push / PR that touches data or code: catches a bad manual entry
+# before it reaches the dashboard.
+on:
+  push:
+    paths: ["*.py", "*.csv", "index.html"]
+  pull_request:
+    paths: ["*.py", "*.csv"]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Merge manual CSVs (no network)
+        run: ONLY=none python collect.py
+      - run: python validate.py
+      - run: python build.py

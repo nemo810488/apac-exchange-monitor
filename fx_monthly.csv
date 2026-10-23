@@ -1,0 +1,133 @@
+month,currency,per_usd,days,source
+2025-10,AUD,1.528817,23,frankfurter.app (ECB)
+2025-10,CNY,7.120152,23,frankfurter.app (ECB)
+2025-10,HKD,7.774909,23,frankfurter.app (ECB)
+2025-10,INR,88.419130,23,frankfurter.app (ECB)
+2025-10,JPY,151.466957,23,frankfurter.app (ECB)
+2025-10,KRW,1423.821739,23,frankfurter.app (ECB)
+2025-10,MYR,4.215487,23,frankfurter.app (ECB)
+2025-10,SGD,1.296087,23,frankfurter.app (ECB)
+2025-10,THB,32.575174,23,frankfurter.app (ECB)
+2025-10,TWD,30.616401,23,fawazahmed0/currency-api
+2025-10,VND,26355.045552,23,fawazahmed0/currency-api
+2025-11,AUD,1.536967,21,frankfurter.app (ECB)
+2025-11,CNY,7.106700,21,frankfurter.app (ECB)
+2025-11,HKD,7.776286,21,frankfurter.app (ECB)
+2025-11,INR,88.842381,21,frankfurter.app (ECB)
+2025-11,JPY,155.069524,21,frankfurter.app (ECB)
+2025-11,KRW,1458.347619,21,frankfurter.app (ECB)
+2025-11,MYR,4.155710,21,frankfurter.app (ECB)
+2025-11,SGD,1.302495,21,frankfurter.app (ECB)
+2025-11,THB,32.380571,21,frankfurter.app (ECB)
+2025-11,TWD,31.140477,20,fawazahmed0/currency-api
+2025-11,VND,26339.402778,20,fawazahmed0/currency-api
+2025-12,AUD,1.506062,21,frankfurter.app (ECB)
+2025-12,CNY,7.045319,21,frankfurter.app (ECB)
+2025-12,HKD,7.781733,21,frankfurter.app (ECB)
+2025-12,INR,90.029048,21,frankfurter.app (ECB)
+2025-12,JPY,155.864286,21,frankfurter.app (ECB)
+2025-12,KRW,1466.815714,21,frankfurter.app (ECB)
+2025-12,MYR,4.092738,21,frankfurter.app (ECB)
+2025-12,SGD,1.291319,21,frankfurter.app (ECB)
+2025-12,THB,31.609524,21,frankfurter.app (ECB)
+2025-12,TWD,31.398983,22,fawazahmed0/currency-api
+2025-12,VND,26329.200064,22,fawazahmed0/currency-api
+2026-01,AUD,1.475414,22,frankfurter.app (ECB)
+2026-01,CNY,6.970768,22,frankfurter.app (ECB)
+2026-01,HKD,7.796355,22,frankfurter.app (ECB)
+2026-01,INR,90.833636,22,frankfurter.app (ECB)
+2026-01,JPY,156.715455,22,frankfurter.app (ECB)
+2026-01,KRW,1456.619545,22,frankfurter.app (ECB)
+2026-01,MYR,4.028218,22,frankfurter.app (ECB)
+2026-01,SGD,1.280450,22,frankfurter.app (ECB)
+2026-01,THB,31.313045,22,frankfurter.app (ECB)
+2026-01,TWD,31.520803,22,fawazahmed0/currency-api
+2026-01,VND,26251.295125,22,fawazahmed0/currency-api
+2026-02,AUD,1.418124,21,frankfurter.app (ECB)
+2026-02,CNY,6.910095,21,frankfurter.app (ECB)
+2026-02,HKD,7.816005,21,frankfurter.app (ECB)
+2026-02,INR,90.821429,21,frankfurter.app (ECB)
+2026-02,JPY,155.101429,21,frankfurter.app (ECB)
+2026-02,KRW,1447.962857,21,frankfurter.app (ECB)
+2026-02,MYR,3.914071,21,frankfurter.app (ECB)
+2026-02,SGD,1.266919,21,frankfurter.app (ECB)
+2026-02,THB,31.266810,21,frankfurter.app (ECB)
+2026-02,TWD,31.483179,20,fawazahmed0/currency-api
+2026-02,VND,25981.751313,20,fawazahmed0/currency-api
+2026-03,AUD,1.424196,23,frankfurter.app (ECB)
+2026-03,CNY,6.894083,23,frankfurter.app (ECB)
+2026-03,HKD,7.826396,23,frankfurter.app (ECB)
+2026-03,INR,92.796957,23,frankfurter.app (ECB)
+2026-03,JPY,158.558261,23,frankfurter.app (ECB)
+2026-03,KRW,1488.754783,23,frankfurter.app (ECB)
+2026-03,MYR,3.950143,23,frankfurter.app (ECB)
+2026-03,SGD,1.278987,23,frankfurter.app (ECB)
+2026-03,THB,32.219565,23,frankfurter.app (ECB)
+2026-03,TWD,31.871473,22,fawazahmed0/currency-api
+2026-03,VND,26269.997620,22,fawazahmed0/currency-api
+2026-04,AUD,1.408665,20,frankfurter.app (ECB)
+2026-04,CNY,6.834380,20,frankfurter.app (ECB)
+2026-04,HKD,7.833595,20,frankfurter.app (ECB)
+2026-04,INR,93.524500,20,frankfurter.app (ECB)
+2026-04,JPY,159.063500,20,frankfurter.app (ECB)
+2026-04,KRW,1481.348500,20,frankfurter.app (ECB)
+2026-04,MYR,3.971000,20,frankfurter.app (ECB)
+2026-04,SGD,1.275630,20,frankfurter.app (ECB)
+2026-04,THB,32.277100,20,frankfurter.app (ECB)
+2026-04,TWD,31.686286,22,fawazahmed0/currency-api
+2026-04,VND,26339.528517,22,fawazahmed0/currency-api
+2026-05,AUD,1.393076,21,frankfurter.app (ECB)
+2026-05,CNY,6.799229,21,frankfurter.app (ECB)
+2026-05,HKD,7.833000,21,frankfurter.app (ECB)
+2026-05,INR,95.522857,21,frankfurter.app (ECB)
+2026-05,JPY,158.159048,21,frankfurter.app (ECB)
+2026-05,KRW,1490.253810,21,frankfurter.app (ECB)
+2026-05,MYR,3.951976,21,frankfurter.app (ECB)
+2026-05,SGD,1.275676,21,frankfurter.app (ECB)
+2026-05,THB,32.513238,21,frankfurter.app (ECB)
+2026-05,TWD,31.509614,21,fawazahmed0/currency-api
+2026-05,VND,26334.973915,21,fawazahmed0/currency-api
+2026-06,AUD,1.423200,22,frankfurter.app (ECB)
+2026-06,CNY,6.775977,22,frankfurter.app (ECB)
+2026-06,HKD,7.837532,22,frankfurter.app (ECB)
+2026-06,INR,94.930909,22,frankfurter.app (ECB)
+2026-06,JPY,160.725000,22,frankfurter.app (ECB)
+2026-06,KRW,1530.137273,22,frankfurter.app (ECB)
+2026-06,MYR,4.069273,22,frankfurter.app (ECB)
+2026-06,SGD,1.287905,22,frankfurter.app (ECB)
+2026-06,THB,32.884864,22,frankfurter.app (ECB)
+2026-06,TWD,31.626058,22,fawazahmed0/currency-api
+2026-06,VND,26321.690157,22,fawazahmed0/currency-api
+2026-07,AUD,1.436022,23,frankfurter.app (ECB)
+2026-07,CNY,6.776513,23,frankfurter.app (ECB)
+2026-07,HKD,7.841100,23,frankfurter.app (ECB)
+2026-07,INR,95.831739,23,frankfurter.app (ECB)
+2026-07,JPY,162.505652,23,frankfurter.app (ECB)
+2026-07,KRW,1490.849130,23,frankfurter.app (ECB)
+2026-07,MYR,4.082739,23,frankfurter.app (ECB)
+2026-07,SGD,1.291552,23,frankfurter.app (ECB)
+2026-07,THB,33.509783,23,frankfurter.app (ECB)
+2026-07,TWD,32.206929,23,fawazahmed0/currency-api
+2026-07,VND,26290.295985,23,fawazahmed0/currency-api
+2026-08,AUD,1.408950,22,frankfurter.app (ECB)
+2026-08,CNY,6.736786,22,frankfurter.app (ECB)
+2026-08,HKD,7.842659,22,frankfurter.app (ECB)
+2026-08,INR,95.445000,22,frankfurter.app (ECB)
+2026-08,JPY,158.866818,22,frankfurter.app (ECB)
+2026-08,KRW,1404.832273,22,frankfurter.app (ECB)
+2026-08,MYR,4.066000,22,frankfurter.app (ECB)
+2026-08,SGD,1.276682,22,frankfurter.app (ECB)
+2026-08,THB,33.032182,22,frankfurter.app (ECB)
+2026-08,TWD,32.012221,20,fawazahmed0/currency-api
+2026-08,VND,26149.713369,20,fawazahmed0/currency-api
+2026-09,AUD,1.404227,22,frankfurter.app (ECB)
+2026-09,CNY,6.708945,22,frankfurter.app (ECB)
+2026-09,HKD,7.843245,22,frankfurter.app (ECB)
+2026-09,INR,95.470455,22,frankfurter.app (ECB)
+2026-09,JPY,156.388636,22,frankfurter.app (ECB)
+2026-09,KRW,1358.411818,22,frankfurter.app (ECB)
+2026-09,MYR,4.070386,22,frankfurter.app (ECB)
+2026-09,SGD,1.272636,22,frankfurter.app (ECB)
+2026-09,THB,33.215227,22,frankfurter.app (ECB)
+2026-09,TWD,31.721834,22,fawazahmed0/currency-api
+2026-09,VND,25999.593581,22,fawazahmed0/currency-api

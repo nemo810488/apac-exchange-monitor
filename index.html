@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>APAC Exchange Monitor</title>
+<meta name="description" content="Monthly average daily volume, contracts and participant mix across APAC stock, futures and options exchanges.">
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10); --wash: rgba(11,11,11,0.04);
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#6250d6; --s8:#e34948;
+  --good:#006300;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page:#0d0d0d; --surface:#1a1a19; --ink:#f0efec; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,0.10); --wash:rgba(255,255,255,0.05);
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
+    --good:#0ca30c;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page:#0d0d0d; --surface:#1a1a19; --ink:#f0efec; --ink-2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,0.10); --wash:rgba(255,255,255,0.05);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
+  --good:#0ca30c;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--page); color: var(--ink); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+a { color: inherit; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 24px 16px 48px; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 16px; margin-bottom: 16px; }
+header h1 { font-size: 22px; font-weight: 650; margin: 0; letter-spacing: -0.01em; }
+header .sub { color: var(--ink-2); }
+header .right { margin-left: auto; display: flex; gap: 8px; align-items: center; color: var(--muted); font-size: 12px; }
+button.ghost { background: none; border: 1px solid var(--border); color: var(--ink-2); border-radius: 6px; padding: 4px 8px; font: inherit; font-size: 12px; cursor: pointer; }
+button.ghost:hover { background: var(--wash); }
+
+.filters { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; padding: 10px 0 14px; border-bottom: 1px solid var(--grid); margin-bottom: 18px; }
+.filters .group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.filters .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; margin-right: 2px; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 7px; overflow: hidden; }
+.seg button { background: none; border: 0; padding: 5px 11px; font: inherit; color: var(--ink-2); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--page); }
+.chip { border: 1px solid var(--border); border-radius: 999px; padding: 3px 10px; background: none; font: inherit; font-size: 13px; color: var(--ink-2); cursor: pointer; }
+.chip[aria-pressed="true"] { border-color: var(--ink); color: var(--ink); background: var(--wash); }
+.chip:hover { background: var(--wash); }
+
+.grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+.card { grid-column: span 12; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px 14px; min-width: 0; }
+.card.half { grid-column: span 6; }
+@media (max-width: 900px) { .card.half { grid-column: span 12; } }
+.card h2 { font-size: 15px; font-weight: 600; margin: 0 0 2px; }
+.card .note { color: var(--muted); font-size: 12px; margin: 0 0 10px; }
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 6px 0 2px; font-size: 12px; color: var(--ink-2); }
+.legend .k { display: inline-flex; align-items: center; gap: 6px; }
+.legend .k i { display: inline-block; width: 14px; height: 2px; border-radius: 1px; }
+.legend .k i.rect { width: 10px; height: 10px; border-radius: 2px; }
+.tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--border); box-shadow: 0 4px 14px rgba(0,0,0,0.12); border-radius: 8px; padding: 8px 10px; font-size: 12px; min-width: 160px; display: none; z-index: 5; }
+.tip .t { color: var(--muted); margin-bottom: 4px; }
+.tip .r { display: flex; align-items: center; gap: 8px; justify-content: space-between; line-height: 1.6; }
+.tip .r .n { color: var(--ink-2); display: inline-flex; align-items: center; gap: 6px; }
+.tip .r .n i { width: 12px; height: 2px; display: inline-block; }
+.tip .r b { font-variant-numeric: tabular-nums; font-weight: 600; }
+.empty { color: var(--muted); padding: 24px 0; text-align: center; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: right; padding: 7px 7px; border-bottom: 1px solid var(--grid); white-space: nowrap; font-variant-numeric: tabular-nums; }
+th { color: var(--muted); font-weight: 500; font-size: 12px; white-space: normal; line-height: 1.25; vertical-align: bottom; }
+th:first-child, td:first-child, th.l, td.l { text-align: left; }
+tr:last-child td { border-bottom: 0; }
+td .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 7px; vertical-align: middle; }
+td .mono { color: var(--muted); font-size: 12px; }
+.bar100 { display: flex; height: 14px; border-radius: 4px; overflow: hidden; gap: 2px; min-width: 120px; }
+.mixtbl th, .mixtbl td { padding: 6px 6px; }
+.bar100 span { display: block; height: 100%; }
+.badge { font-size: 11px; border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; color: var(--muted); }
+.badge.auto { color: var(--good); border-color: transparent; background: var(--wash); }
+details summary { cursor: pointer; color: var(--ink-2); }
+.tablewrap { overflow-x: auto; }
+footer { color: var(--muted); font-size: 12px; margin-top: 24px; line-height: 1.6; }
+.sr { position: absolute; left: -9999px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>APAC Exchange Monitor</h1>
+  <span class="sub" id="subtitle">Loading…</span>
+  <div class="right"><span id="generated"></span><button class="ghost" id="theme" type="button">Theme</button></div>
+</header>
+
+<div class="filters" id="filters">
+  <div class="group"><span class="label">Segment</span><div class="seg" id="segment" role="group" aria-label="Segment"></div></div>
+  <div class="group"><span class="label">Markets</span><div id="countries"></div></div>
+  <div class="group"><span class="label">Range</span><div class="seg" id="range" role="group" aria-label="Range"></div></div>
+</div>
+
+<div class="grid">
+  <section class="card">
+    <h2 id="tbl-title">Latest month</h2>
+    <p class="note" id="tbl-note">Average daily value traded (ADV), contracts per day, and who is trading. Shares are two-sided (buy + sell).</p>
+    <div class="tablewrap"><table id="summary"></table></div>
+  </section>
+
+  <section class="card half" id="card-adv">
+    <h2 id="adv-title">ADV, notional (USD bn)</h2>
+    <p class="note" id="adv-note">Monthly turnover ÷ trading days, converted at the month's average rate.</p>
+    <div class="chart" id="c-adv"></div>
+  </section>
+  <section class="card half" id="card-contracts">
+    <h2>ADV, contracts (thousand / day)</h2>
+    <p class="note">Contracts traded per trading day. Exchanges count contracts differently (e.g. KRX counts a spread as two), so compare trends rather than levels.</p>
+    <div class="chart" id="c-ctr"></div>
+  </section>
+
+  <section class="card half">
+    <h2>Participant mix, latest month</h2>
+    <p class="note">Share of two-sided activity. Basis (value or contracts) shown per row; definitions differ by exchange, see notes.</p>
+    <div id="mix"></div>
+  </section>
+  <section class="card half">
+    <h2><span id="share-title">Retail share</span> over time</h2>
+    <div class="note" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span>Bucket</span><div class="seg" id="bucket" role="group" aria-label="Participant bucket"></div>
+    </div>
+    <div class="chart" id="c-share"></div>
+  </section>
+
+  <section class="card">
+    <h2>Products</h2>
+    <p class="note" id="prod-note">Per-product detail for the selected exchange. Click an exchange in the legend above or pick one here.</p>
+    <div class="group" id="prod-pick" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>
+    <div class="tablewrap"><table id="products"></table></div>
+  </section>
+
+  <section class="card">
+    <details><summary>Coverage and sources</summary>
+      <div class="tablewrap"><table id="coverage"></table></div>
+    </details>
+  </section>
+</div>
+
+<footer id="foot"></footer>
+</div>
+
+<script>
+(() => {
+"use strict";
+const SLOTS = ["--s1","--s2","--s3","--s4","--s5","--s6","--s7","--s8"];
+const BUCKETS = [["retail","Retail"],["foreign","Foreign"],["local_inst","Local institutions"],["prop","Prop / dealers"]];
+const BUCKET_COLOR = { retail:"--s1", foreign:"--s2", local_inst:"--s3", prop:"--s4" };
+const state = { segment:"stocks", countries:new Set(), range:12, bucket:"retail", product_ex:null };
+let D = null, venueByCode = {}, colorOf = {};
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const $ = s => document.querySelector(s);
+const el = (tag, attrs={}, ...kids) => { const e = document.createElement(tag); for (const [k,v] of Object.entries(attrs)) { if (k==="text") e.textContent = v; else if (k.startsWith("on")) e.addEventListener(k.slice(2), v); else e.setAttribute(k, v); } for (const k of kids) if (k!=null) e.append(k); return e; };
+const svgEl = (tag, attrs={}) => { const e = document.createElementNS("http://www.w3.org/2000/svg", tag); for (const [k,v] of Object.entries(attrs)) e.setAttribute(k, v); return e; };
+const fmtMonth = m => { const [y,mo] = m.split("-"); return new Date(+y, +mo-1, 1).toLocaleString("en", {month:"short", year:"2-digit"}); };
+const fmtNum = (v, d=1) => v==null ? "–" : v.toLocaleString("en", {maximumFractionDigits:d, minimumFractionDigits:d});
+const fmtBig = v => v==null ? "–" : v>=1e9 ? fmtNum(v/1e9,2)+" bn" : v>=1e6 ? fmtNum(v/1e6,1)+" m" : v>=1e3 ? fmtNum(v/1e3,0)+" k" : fmtNum(v,0);
+const fmtPct = v => v==null ? "–" : fmtNum(v*100,1)+"%";
+
+// theme toggle (persisted per viewer)
+try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
+$("#theme").addEventListener("click", () => {
+  const cur = document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  const next = cur === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = next; try { localStorage.setItem("theme", next); } catch {}
+  render();
+});
+
+fetch("data.json", {cache:"no-cache"}).then(r => r.json()).then(d => { D = d; init(); }).catch(e => { $("#subtitle").textContent = "Could not load data.json (" + e.message + ")"; });
+
+function init() {
+  for (const v of D.venues) venueByCode[v.exchange] = v;
+  const latest = D.months[D.months.length-1];
+  $("#subtitle").textContent = `Stocks, futures and options · data through ${fmtMonth(latest)}`;
+  $("#generated").textContent = "built " + D.generated_at.slice(0,10);
+  // segments
+  const segs = ["stocks","futures","options"];
+  const sg = $("#segment"); for (const s of segs) sg.append(el("button", {type:"button", text: s[0].toUpperCase()+s.slice(1), "aria-pressed": String(s===state.segment), onclick: () => { state.segment = s; state.product_ex = null; render(); }}));
+  // countries that have data
+  const have = new Set(D.derived.map(r => r.country));
+  const order = [...new Set(D.venues.map(v => v.country))].filter(c => have.has(c));
+  const cc = $("#countries");
+  for (const c of order) { const name = D.venues.find(v => v.country===c).country_name; cc.append(el("button", {class:"chip", type:"button", text:name, "aria-pressed":"true", onclick: (ev) => { if (state.countries.has(c)) state.countries.delete(c); else state.countries.add(c); if (state.countries.size===0) order.forEach(x => state.countries.add(x)); render(); }})); state.countries.add(c); }
+  const rg = $("#range"); for (const n of [6,12,24]) rg.append(el("button", {type:"button", text:`${n}m`, "aria-pressed": String(n===state.range), onclick: () => { state.range = n; render(); }}));
+  const bk = $("#bucket"); for (const [k,label] of BUCKETS) bk.append(el("button", {type:"button", text:label, "aria-pressed": String(k===state.bucket), onclick: () => { state.bucket = k; render(); }}));
+  renderCoverage();
+  render();
+}
+
+function months() { return D.months.slice(-state.range); }
+function rows() { return D.derived.filter(r => r.segment===state.segment && state.countries.has(r.country)); }
+function venuesInSegment() {
+  // stable order from venues.csv; colour follows the exchange within a segment (never its rank)
+  const present = new Set(D.derived.filter(r => r.segment===state.segment).map(r => r.exchange));
+  const list = D.venues.map(v => v.exchange).filter(x => present.has(x));
+  colorOf = {}; list.forEach((x,i) => colorOf[x] = SLOTS[i % SLOTS.length]);
+  return list.filter(x => state.countries.has(venueByCode[x].country));
+}
+
+function render() {
+  for (const b of $("#segment").children) b.setAttribute("aria-pressed", String(b.textContent.toLowerCase()===state.segment));
+  for (const b of $("#range").children) b.setAttribute("aria-pressed", String(b.textContent===`${state.range}m`));
+  for (const b of $("#countries").children) { const c = D.venues.find(v => v.country_name===b.textContent).country; b.setAttribute("aria-pressed", String(state.countries.has(c))); }
+  for (const b of $("#bucket").children) b.setAttribute("aria-pressed", String(b.textContent===BUCKETS.find(x=>x[0]===state.bucket)[1]));
+  $("#share-title").textContent = BUCKETS.find(x=>x[0]===state.bucket)[1] + " share";
+  const vlist = venuesInSegment();
+  const ms = months();
+  const all = rows().filter(r => r.product==="ALL");
+  const isDeriv = state.segment !== "stocks";
+  $("#card-contracts").style.display = isDeriv ? "" : "none";
+  $("#card-adv").classList.toggle("half", isDeriv);
+  renderSummary(vlist, all);
+  const isOpt = state.segment==="options";
+  $("#adv-title").textContent = isOpt ? "ADV, premium (USD m)" : "ADV, notional (USD bn)";
+  $("#adv-note").textContent = isOpt ? "Monthly premium turnover ÷ trading days, in USD. Premium is the only value measure every options exchange publishes; notional (where published) is in the tables." : "Monthly turnover ÷ trading days, converted at the month's average rate.";
+  if (isOpt) lineChart($("#c-adv"), vlist, ms, all, r => r.adv_premium_usd ?? null, v => fmtNum(v/1e6,0), "USD m");
+  else lineChart($("#c-adv"), vlist, ms, all, r => r.adv_notional_usd ?? null, v => fmtNum(v/1e9,1), "USD bn");
+  if (isDeriv) lineChart($("#c-ctr"), vlist, ms, all, r => r.adv_contracts ?? null, v => fmtNum(v/1e3,0), "k contracts");
+  renderMix(vlist, all);
+  lineChart($("#c-share"), vlist, ms, all, r => r.shares ? (r.shares[state.bucket] ?? null) : null, v => fmtNum(v*100,1)+"%", "%", true);
+  renderProducts(vlist);
+}
+
+function latestFor(all, ex) { const rs = all.filter(r => r.exchange===ex); return rs.length ? rs.reduce((a,b) => a.month>b.month?a:b) : null; }
+
+function renderSummary(vlist, all) {
+  const t = $("#summary"); t.replaceChildren();
+  const isDeriv = state.segment !== "stocks";
+  const isOpt = state.segment === "options";
+  const head = ["Exchange","Month","Days", isDeriv ? "Notional ADV (USD bn)" : "ADV (USD bn)", "Local ADV (bn)", ...(isOpt ? ["Premium ADV (USD m)"] : []), ...(isDeriv ? ["Contracts / day"] : []), "Retail","Foreign","Local inst.","Prop","Basis",`${state.range}m trend`];
+  t.append(el("thead", {}, el("tr", {}, ...head.map((h,i) => el("th", {class: i===0?"l":"", text:h})))));
+  const tb = el("tbody");
+  for (const ex of vlist) {
+    const r = latestFor(all, ex); if (!r) continue;
+    const v = venueByCode[ex]; const sh = r.shares || {};
+    const spark = sparkline(all.filter(x => x.exchange===ex && months().includes(x.month)).sort((a,b)=>a.month<b.month?-1:1).map(x => x.adv_notional_usd ?? x.adv_premium_usd ?? x.adv_contracts ?? null), css(colorOf[ex]));
+    tb.append(el("tr", {},
+      el("td", {class:"l"}, el("span", {class:"dot", style:`background:${css(colorOf[ex])}`}), el("span", {text: v.exchange_name}), " ", el("span", {class:"mono", text: ex})),
+      el("td", {text: fmtMonth(r.month)}), el("td", {text: r.trading_days}),
+      el("td", {text: r.adv_notional_usd ? fmtNum(r.adv_notional_usd/1e9,1) : "–"}),
+      el("td", {text: r.adv_notional_local ? `${fmtNum(r.adv_notional_local/1e9, r.adv_notional_local>1e12?0:1)} ${r.currency||""}` : (r.adv_premium_local ? `${fmtNum(r.adv_premium_local/1e9,2)} ${r.currency||""} (prem.)` : "–")}),
+      ...(isOpt ? [el("td", {text: r.adv_premium_usd ? fmtNum(r.adv_premium_usd/1e6,0) : "–"})] : []),
+      ...(isDeriv ? [el("td", {text: r.adv_contracts ? fmtNum(r.adv_contracts,0) : "–"})] : []),
+      el("td", {text: fmtPct(sh.retail)}), el("td", {text: fmtPct(sh.foreign)}), el("td", {text: fmtPct(sh.local_inst)}), el("td", {text: fmtPct(sh.prop)}),
+      el("td", {}, el("span", {class:"badge", text: r.share_basis || "n/a"})),
+      el("td", {}, spark)));
+  }
+  if (!tb.children.length) tb.append(el("tr", {}, el("td", {colspan: String(head.length), class:"empty", text:"No data for this selection yet."})));
+  t.append(tb);
+}
+
+function sparkline(vals, color) {
+  const w = 90, h = 22; const s = svgEl("svg", {viewBox:`0 0 ${w} ${h}`, width:w, height:h, "aria-hidden":"true"});
+  const xs = vals.map((v,i) => i); const ok = vals.filter(v => v!=null); if (ok.length<2) return s;
+  const mn = Math.min(...ok), mx = Math.max(...ok); const y = v => mx===mn ? h/2 : h-2 - (v-mn)/(mx-mn)*(h-4);
+  let d = ""; vals.forEach((v,i) => { if (v==null) return; d += (d?"L":"M") + (i/(vals.length-1)*(w-4)+2).toFixed(1) + "," + y(v).toFixed(1); });
+  s.append(svgEl("path", {d, fill:"none", stroke:color, "stroke-width":1.5, "stroke-linejoin":"round"}));
+  const last = vals[vals.length-1]; if (last!=null) s.append(svgEl("circle", {cx:w-2, cy:y(last), r:2.5, fill:color}));
+  return s;
+}
+
+function lineChart(host, vlist, ms, all, pick, fmt, unit, isPct=false) {
+  host.replaceChildren();
+  const series = vlist.map(ex => ({ ex, name: venueByCode[ex].exchange_name, color: css(colorOf[ex]), vals: ms.map(m => { const r = all.find(x => x.exchange===ex && x.month===m); return r ? pick(r) : null; }) })).filter(s => s.vals.some(v => v!=null));
+  if (!series.length) { host.append(el("div", {class:"empty", text:"Nothing to plot for this selection."})); return; }
+  const W = 560, H = 260, pad = {l:48, r:70, t:12, b:28};
+  const svg = svgEl("svg", {viewBox:`0 0 ${W} ${H}`, role:"img"});
+  svg.append(svgEl("title")); svg.lastChild.textContent = `${unit} by exchange, ${fmtMonth(ms[0])} to ${fmtMonth(ms[ms.length-1])}`;
+  const allv = series.flatMap(s => s.vals).filter(v => v!=null);
+  let mx = Math.max(...allv), mn = 0; if (isPct) { mx = Math.min(1, mx*1.1); } else mx *= 1.08;
+  if (mx<=0) mx = 1;
+  const x = i => pad.l + (ms.length===1 ? 0 : i/(ms.length-1)*(W-pad.l-pad.r));
+  const y = v => pad.t + (1 - (v-mn)/(mx-mn))*(H-pad.t-pad.b);
+  // grid (hairlines, solid)
+  const ticks = niceTicks(mn, mx, 4);
+  for (const tv of ticks) { svg.append(svgEl("line", {x1:pad.l, x2:W-pad.r, y1:y(tv), y2:y(tv), stroke: tv===0?css("--axis"):css("--grid"), "stroke-width":1})); const t = svgEl("text", {x:pad.l-8, y:y(tv)+4, "text-anchor":"end", "font-size":11, fill:css("--muted"), style:"font-variant-numeric:tabular-nums"}); t.textContent = fmt(tv); svg.append(t); }
+  const step = Math.ceil(ms.length/8);
+  const lastI = ms.length-1;
+  ms.forEach((m,i) => { if (i===lastI || (i%step===0 && lastI-i >= Math.max(2, step/2))) { const t = svgEl("text", {x:x(i), y:H-8, "text-anchor":"middle", "font-size":11, fill:css("--muted")}); t.textContent = fmtMonth(m); svg.append(t); } });
+  // lines
+  for (const s of series) {
+    let d = ""; s.vals.forEach((v,i) => { if (v==null) { d += " "; return; } d += (d.endsWith(" ")||!d ? "M" : "L") + x(i).toFixed(1) + "," + y(v).toFixed(1); });
+    svg.append(svgEl("path", {d: d.trim(), fill:"none", stroke:s.color, "stroke-width":2, "stroke-linejoin":"round", "stroke-linecap":"round"}));
+  }
+  // endpoint direct labels (<= 4 series), de-collided
+  if (series.length <= 4) {
+    const ends = series.map(s => { const i = s.vals.map((v,i)=>v!=null?i:-1).filter(i=>i>=0).pop(); return i==null ? null : {s, i, yy: y(s.vals[i]), v: s.vals[i]}; }).filter(Boolean).sort((a,b) => a.yy-b.yy);
+    for (let k=1;k<ends.length;k++) if (ends[k].yy - ends[k-1].yy < 13) ends[k].yy = ends[k-1].yy + 13;
+    for (const e of ends) { svg.append(svgEl("circle", {cx:x(e.i), cy:y(e.v), r:3.5, fill:e.s.color, stroke:css("--surface"), "stroke-width":2})); const t = svgEl("text", {x:x(e.i)+8, y:e.yy+4, "font-size":11, fill:css("--ink-2"), style:"font-variant-numeric:tabular-nums"}); t.textContent = `${e.s.ex} ${fmt(e.v)}`; svg.append(t); }
+  }
+  // hover layer: crosshair + tooltip listing every series
+  const cross = svgEl("line", {y1:pad.t, y2:H-pad.b, stroke:css("--axis"), "stroke-width":1, visibility:"hidden"}); svg.append(cross);
+  const dots = series.map(s => { const c = svgEl("circle", {r:4, fill:s.color, stroke:css("--surface"), "stroke-width":2, visibility:"hidden"}); svg.append(c); return c; });
+  const hit = svgEl("rect", {x:pad.l-10, y:0, width:W-pad.l-pad.r+20, height:H, fill:"transparent"}); svg.append(hit);
+  const tip = el("div", {class:"tip"});
+  host.append(svg, tip);
+  const show = i => {
+    cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility","visible");
+    tip.replaceChildren(el("div", {class:"t", text: fmtMonth(ms[i])}));
+    series.forEach((s,k) => { const v = s.vals[i]; if (v==null) { dots[k].setAttribute("visibility","hidden"); return; } dots[k].setAttribute("cx", x(i)); dots[k].setAttribute("cy", y(v)); dots[k].setAttribute("visibility","visible");
+      tip.append(el("div", {class:"r"}, el("span", {class:"n"}, el("i", {style:`background:${s.color}`}), el("span", {text:s.ex})), el("b", {text: fmt(v)}))); });
+    tip.style.display = "block";
+    const bb = host.getBoundingClientRect(); const px = x(i)/W*bb.width; tip.style.left = (px + 14 + 180 > bb.width ? px - 14 - tip.offsetWidth : px + 14) + "px"; tip.style.top = "8px";
+  };
+  const hide = () => { cross.setAttribute("visibility","hidden"); dots.forEach(c => c.setAttribute("visibility","hidden")); tip.style.display = "none"; };
+  hit.addEventListener("pointermove", ev => { const bb = svg.getBoundingClientRect(); const px = (ev.clientX-bb.left)/bb.width*W; let best = 0, bd = 1e9; ms.forEach((m,i) => { const d = Math.abs(x(i)-px); if (d<bd) { bd=d; best=i; } }); show(best); });
+  hit.addEventListener("pointerleave", hide);
+  hit.setAttribute("tabindex","0"); let fi = ms.length-1;
+  hit.addEventListener("focus", () => show(fi)); hit.addEventListener("blur", hide);
+  hit.addEventListener("keydown", ev => { if (ev.key==="ArrowLeft") { fi = Math.max(0, fi-1); show(fi); ev.preventDefault(); } if (ev.key==="ArrowRight") { fi = Math.min(ms.length-1, fi+1); show(fi); ev.preventDefault(); } });
+  // legend (always, >= 2 series) — clicking selects the exchange for the product table
+  if (series.length >= 2) { const lg = el("div", {class:"legend"}); for (const s of series) lg.append(el("button", {class:"k chip", type:"button", style:"border:0;padding:2px 4px", onclick: () => { state.product_ex = s.ex; renderProducts(vlist); $("#products").scrollIntoView({behavior:"smooth", block:"nearest"}); }}, el("i", {style:`background:${s.color}`}), el("span", {text:s.name}))); host.append(lg); }
+}
+
+function niceTicks(mn, mx, n) { const span = mx-mn; const raw = span/n; const p = Math.pow(10, Math.floor(Math.log10(raw))); const steps = [1,2,2.5,5,10]; const st = steps.map(s=>s*p).find(s => span/s <= n+1) || 10*p; const out = []; for (let v = Math.ceil(mn/st)*st; v <= mx+1e-9; v += st) out.push(+v.toFixed(10)); return out; }
+
+function renderMix(vlist, all) {
+  const host = $("#mix"); host.replaceChildren();
+  const t = el("table", {class:"mixtbl"}); t.append(el("thead", {}, el("tr", {}, el("th", {class:"l", text:"Exchange"}), el("th", {class:"l", text:""}), ...BUCKETS.map(b => el("th", {text:b[1].replace("Local institutions","Local inst.").replace("Prop / dealers","Prop")})))));
+  const tb = el("tbody"); let any = false;
+  for (const ex of vlist) { const r = latestFor(all, ex); if (!r || !r.shares) continue; any = true; const sh = r.shares;
+    const bar = el("div", {class:"bar100", role:"img", "aria-label": BUCKETS.map(b => `${b[1]} ${fmtPct(sh[b[0]])}`).join(", ")});
+    for (const [k] of BUCKETS) { const v = sh[k] || 0; const seg = el("span", {style:`width:${(v*100).toFixed(2)}%;background:${css(BUCKET_COLOR[k])}`, title:`${k} ${fmtPct(v)}`}); bar.append(seg); }
+    tb.append(el("tr", {}, el("td", {class:"l"}, el("span", {class:"dot", style:`background:${css(colorOf[ex])}`}), el("span", {text: ex}), " ", el("span", {class:"mono", text: fmtMonth(r.month)})), el("td", {class:"l"}, bar), ...BUCKETS.map(b => el("td", {text: fmtPct(sh[b[0]])}))));
+  }
+  t.append(tb); host.append(t);
+  if (!any) host.append(el("div", {class:"empty", text:"No participant data for this selection."}));
+  const lg = el("div", {class:"legend"}); for (const [k,label] of BUCKETS) lg.append(el("span", {class:"k"}, el("i", {class:"rect", style:`background:${css(BUCKET_COLOR[k])}`}), el("span", {text:label}))); host.append(lg);
+}
+
+function renderProducts(vlist) {
+  const pick = $("#prod-pick"); pick.replaceChildren();
+  if (!vlist.includes(state.product_ex)) state.product_ex = vlist[0] || null;
+  for (const ex of vlist) pick.append(el("button", {class:"chip", type:"button", text: ex, "aria-pressed": String(ex===state.product_ex), onclick: () => { state.product_ex = ex; renderProducts(vlist); }}));
+  const t = $("#products"); t.replaceChildren();
+  if (!state.product_ex) return;
+  const ms = months();
+  const rs = D.derived.filter(r => r.segment===state.segment && r.exchange===state.product_ex && ms.includes(r.month));
+  const prods = [...new Set(rs.map(r => r.product))];
+  const latestM = rs.length ? rs.map(r => r.month).sort().pop() : null;
+  const byLatest = p => rs.find(r => r.product===p && r.month===latestM);
+  prods.sort((a,b) => (a==="ALL"?-1:b==="ALL"?1:0) || ((byLatest(b)?.adv_notional_usd ?? byLatest(b)?.adv_contracts ?? 0) - (byLatest(a)?.adv_notional_usd ?? byLatest(a)?.adv_contracts ?? 0)));
+  const isDeriv = state.segment !== "stocks";
+  const head = ["Product", "ADV notional (USD m)", "ADV local (m)", ...(isDeriv ? ["ADV premium (USD m)", "ADV contracts"] : []), "Retail","Foreign","Local inst.","Prop","Basis", `${ms.length}m trend`, "Source"];
+  t.append(el("thead", {}, el("tr", {}, ...head.map((h,i) => el("th", {class:i===0?"l":"", text:h})))));
+  const tb = el("tbody"); const color = css(colorOf[state.product_ex]);
+  const srcOf = (p, r) => { const s = D.series.find(s => s.exchange===state.product_ex && s.segment===state.segment && s.product===p && (s.metric==="turnover_notional"||s.metric==="contracts"||s.metric==="turnover_premium")); return s ? s.sources[r.month] : null; };
+  for (const p of prods) { const r = byLatest(p); if (!r) continue; const sh = r.shares||{};
+    const seq = ms.map(m => rs.find(x => x.product===p && x.month===m)).map(x => x ? (x.adv_notional_usd ?? x.adv_premium_usd ?? x.adv_contracts ?? null) : null);
+    const src = srcOf(p, r);
+    tb.append(el("tr", {}, el("td", {class:"l", text: p==="ALL" ? "All products" : p}),
+      el("td", {text: r.adv_notional_usd ? fmtNum(r.adv_notional_usd/1e6,0) : "–"}),
+      el("td", {text: r.adv_notional_local ? `${fmtNum(r.adv_notional_local/1e6,0)} ${r.currency||""}` : "–"}),
+      ...(isDeriv ? [el("td", {text: r.adv_premium_usd ? fmtNum(r.adv_premium_usd/1e6,1) : "–"}), el("td", {text: r.adv_contracts ? fmtNum(r.adv_contracts,0) : "–"})] : []),
+      el("td", {text: fmtPct(sh.retail)}), el("td", {text: fmtPct(sh.foreign)}), el("td", {text: fmtPct(sh.local_inst)}), el("td", {text: fmtPct(sh.prop)}),
+      el("td", {}, el("span", {class:"badge", text: r.share_basis||"n/a"})),
+      el("td", {}, sparkline(seq, color)),
+      el("td", {}, src ? el("a", {href: src, target:"_blank", rel:"noopener", text:"source"}) : "–")));
+  }
+  t.append(tb);
+  $("#prod-note").textContent = `${venueByCode[state.product_ex].exchange_name} · ${state.segment} · latest ${latestM ? fmtMonth(latestM) : "–"}. Notional for options is the underlying value where published; premium shown separately.`;
+}
+
+function renderCoverage() {
+  const t = $("#coverage"); t.replaceChildren();
+  t.append(el("thead", {}, el("tr", {}, ...["Market","Exchange","Segments","Collection","Participant data","Months loaded","Notes"].map((h,i) => el("th", {class: i<7?"l":"", text:h})))));
+  const tb = el("tbody");
+  for (const v of D.venues) { const n = new Set(D.derived.filter(r => r.exchange===v.exchange).map(r => r.month)).size;
+    tb.append(el("tr", {}, el("td", {class:"l", text:v.country_name}), el("td", {class:"l", text:`${v.exchange_name} (${v.exchange})`}), el("td", {class:"l", text:v.segments.replaceAll(";", ", ")}), el("td", {class:"l"}, el("span", {class:"badge "+(v.status==="auto"?"auto":""), text:v.status})), el("td", {class:"l", text:v.participant_data}), el("td", {class:"l", text: n ? String(n) : "–"}), el("td", {class:"l", text:v.notes, style:"white-space:normal;min-width:320px;color:var(--ink-2)"})));
+  }
+  t.append(tb);
+  $("#foot").textContent = "ADV = monthly turnover ÷ trading days of that exchange. USD conversion uses the simple average of daily ECB reference rates (TWD, VND from a daily open-data feed). Participant shares are two-sided (buy + sell) and use each exchange's own categories mapped to four buckets: retail (local individuals), foreign (all non-resident investors), local institutions (funds, insurers, banks, pensions, corporates), prop (securities/futures dealers' own accounts, including market makers). TWSE/TPEx retail is a residual after the three major institutional categories and therefore includes domestic corporates. Figures are as published by the exchanges and may be revised; see the source link on each product row.";
+}
+})();
+</script>
+</body>
+</html>

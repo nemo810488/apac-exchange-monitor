@@ -1,0 +1,11 @@
+month,country,exchange,segment,trading_days,currency,adv_notional_local_bn,adv_notional_usd_bn,adv_premium_usd_bn,adv_contracts,retail,foreign,local_inst,prop,share_basis
+2026-09,JP,OSE,futures,19,JPY,26157.312,167.258,,1912725,0.055,0.759,0.038,0.148,value
+2026-09,JP,OSE,options,19,JPY,,,0.252,109100,0.037,0.888,0.011,0.065,value
+2026-09,JP,TSE,stocks,19,JPY,9878.343,63.165,,,0.236,0.594,0.054,0.115,value
+2026-09,KR,KRX,futures,20,KRW,135898.476,100.042,,9740290,0.073,0.570,0.129,0.227,contracts
+2026-09,KR,KRX,options,20,KRW,,,0.401,1765761,,,,,
+2026-09,KR,KRX,stocks,20,KRW,28430.211,20.929,,,0.400,0.331,0.202,0.067,value
+2026-09,TW,TAIFEX,futures,20,TWD,1735.060,54.696,,1178326,0.448,0.469,0.010,0.073,contracts
+2026-09,TW,TAIFEX,options,20,TWD,1167.955,36.819,0.096,498567,0.429,0.309,0.004,0.257,contracts
+2026-09,TW,TPEX,stocks,20,TWD,223.970,7.060,,,0.623,0.313,0.024,0.041,value
+2026-09,TW,TWSE,stocks,20,TWD,881.178,27.778,,,0.546,0.384,0.024,0.046,value

@@ -92,9 +92,13 @@ def main() -> int:
                     ratio = bm[b] / bm[a]
                     if ratio > 4 or ratio < 0.25:
                         warns.append(f"{ex} {seg} {prod} {met}: {a}->{b} changed {ratio:.1f}x (unit error?)")
-    # ALL >= component
+    # ALL >= component (skipped when the component is in another currency, e.g. HKEX Stock Connect
+    # northbound turnover in CNY, which is trading on the mainland exchanges, not HKEX turnover)
+    ccy = {(r["exchange"], r["segment"], r["product"]): r["currency"] for r in rows if r["metric"] == "turnover_notional"}
     for (ex, seg, prod, met, basis), bm in series.items():
         if prod != "ALL" and met in {"turnover_notional", "turnover_premium", "contracts"}:
+            if met == "turnover_notional" and ccy.get((ex, seg, prod)) != ccy.get((ex, seg, "ALL")):
+                continue
             allbm = series.get((ex, seg, "ALL", met, basis), {})
             for m, v in bm.items():
                 if m in allbm and v > allbm[m] * 1.0001:

@@ -1,4 +1,7 @@
 month,country,exchange,segment,trading_days,currency,adv_notional_local_bn,adv_notional_usd_bn,adv_premium_usd_bn,adv_contracts,retail,foreign,local_inst,prop,share_basis
+2026-09,HK,HKEX,futures,22,,,,,555405,,,,,
+2026-09,HK,HKEX,options,22,,,,,932718,,,,,
+2026-09,HK,HKEX,stocks,21,HKD,211.532,26.970,,,,,,,
 2026-09,JP,OSE,futures,19,JPY,26157.312,167.258,,1912725,0.055,0.759,0.038,0.148,value
 2026-09,JP,OSE,options,19,JPY,,,0.252,109100,0.037,0.888,0.011,0.065,value
 2026-09,JP,TSE,stocks,19,JPY,9878.343,63.165,,,0.236,0.594,0.054,0.115,value
